@@ -1,20 +1,20 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Hero from './components/Hero';
 import ProjectList from './components/ProjectList';
 import ProjectfSection from './components/ProjectfSection';
 import Socials from './components/Socials';
+import ErrorPage from './components/ErrorPage';
 
-function App() {
+function MainContent() {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const projectfRef = useRef(null);
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
       if (projectfRef.current) {
         const rect = projectfRef.current.getBoundingClientRect();
-        // If the top of the Projectf section is within the viewport (or close to it)
-        // Switch to dark mode.
-        // Let's trigger it when the section is halfway up the screen or just entering.
         if (rect.top < window.innerHeight / 2) {
           setIsDarkMode(true);
         } else {
@@ -35,15 +35,35 @@ function App() {
     }
   }, [isDarkMode]);
 
+  // Reset scroll when route changes
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location]);
+
   return (
     <div className="app">
-      <Hero />
-      <Socials />
-      <ProjectList />
-      <div ref={projectfRef}>
+      <div className="snap-section">
+        <Hero />
+        <Socials />
+        <ProjectList />
+      </div>
+      <div ref={projectfRef} className="snap-section">
         <ProjectfSection />
       </div>
     </div>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<MainContent />} />
+        <Route path="/403" element={<ErrorPage code={403} title="Acceso Prohibido" message="No tienes permiso para acceder a esta página." />} />
+        <Route path="/401" element={<ErrorPage code={401} title="No Autorizado" message="Necesitas iniciar sesión para ver este contenido." />} />
+        <Route path="*" element={<ErrorPage code={404} title="Página No Encontrada" message="Lo sentimos, la página que buscas no existe." />} />
+      </Routes>
+    </Router>
   );
 }
 
