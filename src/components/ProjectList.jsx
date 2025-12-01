@@ -37,7 +37,7 @@ const projects = [
         id: 4,
         name: 'Crisutf TV+',
         description: 'Plataforma de streaming.',
-        url: 'https://github.com/crisutf/crisu-tv',
+        url: 'https://github.com/crisutf/crisutf-tv',
         tags: ['Streaming', 'React', 'Video'],
         icon: <Tv size={24} />,
         color: '#e056fd'
@@ -188,4 +188,5 @@ const ProjectList = () => {
 };
 
 export default ProjectList;
+
 
